@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>جاري تحويلك...</title>
+    <script>
+        // كود تلقائي لتحويل أي حروف كبيرة في الرابط إلى صغيرة وإعادة التوجيه
+        var currentUrl = window.location.href;
+        var lowerCaseUrl = currentUrl.toLowerCase();
+        
+        if (currentUrl !== lowerCaseUrl) {
+            window.location.replace(lowerCaseUrl);
+        } else {
+            // إذا كان الرابط أصلاً صغيراً ومع ذلك هناك خطأ، يتم توجيهه للصفحة الرئيسية للموقع
+            window.location.replace("https://github.io");
+        }
+    </script>
+</head>
+<body>
+    <p style="text-align: center; font-family: sans-serif; margin-top: 50px;">جاري تحميل البطاقة...</p>
+</body>
+</html>
