@@ -175,24 +175,37 @@ $('photo').onchange=function(e){
   r.readAsDataURL(file);
 };
 
-$('save').onclick=async function(){
-  var btn=$('save'),msg=$('msg');
-  btn.disabled=true;msg.textContent='جارٍ تجهيز الصورة…';
+// دالة الحفظ والتحميل التلقائي (نسخة واحدة نظيفة ومكتملة)
+$('save').onclick = async function(){
+  var btn = $('save'), msg = $('msg');
+  btn.disabled = true; msg.textContent = 'جاري تجهيز الصورة وتحميلها…';
   try{
-    if(document.fonts&&document.fonts.ready)await document.fonts.ready;
-    var canvas=await html2canvas($('card'),{scale:2,backgroundColor:null,useCORS:true});
-    var blob=await new Promise(function(r){canvas.toBlob(r,'image/png')});
-    var url=URL.createObjectURL(blob);
-    $('outImg').src=url;
-    $('out').style.display='block';
-    msg.textContent='تم إنشاء الصورة بنجاح!';
+    if(document.fonts && document.fonts.ready) await document.fonts.ready;
+    var canvas = await html2canvas($('card'), {scale: 2, backgroundColor: null, useCORS: true});
+    var blob = await new Promise(function(r){ canvas.toBlob(r, 'image/png') });
+    var url = URL.createObjectURL(blob);
+    
+    // أولاً: عرضها في الأسفل كالمعتاد
+    $('outImg').src = url;
+    $('out').style.display = 'block';
+    
+    // ثانياً: كود التحميل التلقائي والمباشر إلى الجهاز
+    var dlLink = document.createElement('a');
+    dlLink.download = 'card_' + (Date.now()) + '.png'; // اسم ملف الصورة المنزلة
+    dlLink.href = url;
+    document.body.appendChild(dlLink);
+    dlLink.click(); // محاكاة نقرة برمجية لبدء التحميل فوراً
+    document.body.removeChild(dlLink);
+    
+    msg.textContent = 'تم إنشاء الصورة وتحميلها بنجاح!';
   }catch(err){
     console.error(err);
-    msg.textContent='حدث خطأ أثناء حفظ الصورة.';
+    msg.textContent = 'حدث خطأ أثناء حفظ الصورة.';
   }finally{
-    btn.disabled=false;
+    btn.disabled = false;
   }
 };
+
 </script>
 </body>
 </html>
