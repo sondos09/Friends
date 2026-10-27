@@ -182,10 +182,34 @@ $('save').onclick=async function(){
     if(document.fonts&&document.fonts.ready)await document.fonts.ready;
     var canvas=await html2canvas($('card'),{scale:2,backgroundColor:null,useCORS:true});
     var blob=await new Promise(function(r){canvas.toBlob(r,'image/png')});
+    if(!blob)throw new Error('فشل إنشاء الصورة');
+
+    var name='بطاقة-'+($('f_name').value.trim()||'عني')+'.png';
     var url=URL.createObjectURL(blob);
+
+    // نعرض المعاينة دائماً كخيار احتياطي (ضغط مطوّل للحفظ)
     $('outImg').src=url;
     $('out').style.display='block';
-    msg.textContent='تم إنشاء الصورة بنجاح!';
+
+    // 1) على الجوال: نافذة المشاركة (تتيح "حفظ في الصور")
+    var file=new File([blob],name,{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({files:[file],title:'بطاقتي'});
+        msg.textContent='تم! ✅';
+        return;
+      }catch(e){
+        if(e.name==='AbortError'){msg.textContent='تم الإلغاء.';return;}
+        // أي خطأ آخر: ننتقل للتنزيل المباشر
+      }
+    }
+
+    // 2) تنزيل مباشر (الكمبيوتر وأغلب المتصفحات)
+    var a=document.createElement('a');
+    a.href=url;a.download=name;
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(url)},60000);
+    msg.textContent='تم التنزيل ✅ وإن لم يظهر، اضغط مطولاً على الصورة أدناه.';
   }catch(err){
     console.error(err);
     msg.textContent='حدث خطأ أثناء حفظ الصورة.';
