@@ -8,9 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-:root{--bg:#fdf6ff;--panel:#fff;--text:#2b2340;--muted:#7a7194;--line:#e6dcf3;--accent:#3b9be8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17131f;--panel:#221c2e;--text:#f1ecfa;--muted:#a79cc0;--line:#3a3150}}
-:root[data-theme="dark"]{--bg:#17131f;--panel:#221c2e;--text:#f1ecfa;--muted:#a79cc0;--line:#3a3150}
+:root{--bg:#17131f;--panel:#221c2e;--text:#f1ecfa;--muted:#a79cc0;--line:#3a3150;--accent:#38bdf8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:'Cairo',Tahoma,Arial,sans-serif;line-height:1.6}
@@ -33,38 +31,29 @@ input,textarea{width:100%;font:inherit;padding:9px 12px;border-radius:10px;borde
 #out{display:none;margin-top:10px;text-align:center}
 #out img{max-width:100%;border-radius:12px}
 
-/* 1. ألوان بطاقة الذكور: داكنة شبابية وفخمة (Dark Slate Blue) */
+/* ألوان بطاقة الذكور: داكنة شبابية وفخمة */
 #card {
-  --c1: #0F172A;     /* اللون الداكن الأساسي اللي طلبته */
-  --c2: #1E293B;     /* التدرج الداكن المكمل */
-  --ink: #F8FAFC;    /* لون النصوص الأساسية (أبيض ثلجي ناصع للوضوح) */
-  --pop: #38BDF8;    /* لون الشريط والحدود (أزرق سماوي مضيء نيون) */
-  --soft: #33415580; /* خلفية مربعات البيانات (رمادي داكن شبه شفاف) */
-  
-  width: 340px;
-  padding: 12px;
-  border-radius: 26px;
-  background: linear-gradient(160deg, var(--c1), var(--c2));
-  color: var(--ink);
-  position: relative;
-  overflow: hidden;
-  font-family: 'Cairo', Tahoma, Arial, sans-serif;
-  direction: rtl;
+  --c1: #0F172A;     
+  --c2: #1E293B;     
+  --ink: #F8FAFC;    
+  --pop: #38BDF8;    
+  --soft: #33415580; 
+  width:340px;padding:12px;border-radius:26px;background:linear-gradient(160deg,var(--c1),var(--c2));color:var(--ink);position:relative;overflow:hidden;font-family:'Cairo',Tahoma,Arial,sans-serif;direction:rtl
 }
 
-/* 2. ألوان بطاقة البنات: داكنة غامضة وبناتية في نفس الوقت (Dark Cyber Pink) */
+/* ألوان بطاقة البنات: داكنة وغامضة عصرية */
 #card.girl {
-  --c1: #1E112A;     /* خلفية بنفسجية ليلية داكنة جداً */
-  --c2: #2D122D;     /* تدرج وردي مخملي غامق */
-  --ink: #FDF4FF;    /* لون النصوص (أبيض وردي ناعم وواضح) */
-  --pop: #F43F5E;    /* لون الشريط والحدود (وردي نيون مضيء وجذاب) */
-  --soft: #4C1D9560; /* خلفية المربعات (بنفسجي داكن شبه شفاف) */
+  --c1: #1E112A;     
+  --c2: #2D122D;     
+  --ink: #FDF4FF;    
+  --pop: #F43F5E;    
+  --soft: #4C1D9560; 
 }
 
-#card .in{border:3px dashed var(--pop);border-radius:20px;padding:12px;position:relative;background:#ffffff40}
+#card .in{border:3px dashed var(--pop);border-radius:20px;padding:12px;position:relative;background:#ffffff10}
 .dec{position:absolute;font-size:20px;opacity:.85;top:6px}
 .ribbon{display:block;width:max-content;margin:0 auto 8px;background:var(--pop);color:#fff;font-weight:800;font-size:15px;padding:2px 18px;border-radius:999px}
-.ava{width:104px;height:104px;margin:0 auto 4px;border-radius:50%;background:#fff;border:4px solid var(--pop);display:flex;align-items:center;justify-content:center;font-size:48px;line-height:1;overflow:hidden}
+.ava{width:104px;height:104px;margin:0 auto 4px;border-radius:50%;background:#1e293b;border:4px solid var(--pop);display:flex;align-items:center;justify-content:center;font-size:48px;line-height:1;overflow:hidden}
 .ava img{width:100%;height:100%;object-fit:cover;display:block}
 .nm{text-align:center;font-weight:800;font-size:22px;line-height:1.3;word-break:break-word;margin-bottom:6px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
@@ -111,7 +100,6 @@ input,textarea{width:100%;font:inherit;padding:9px 12px;border-radius:10px;borde
 </div>
 <script>
 var $=function(id){return document.getElementById(id)};
-// key, label, placeholder, full-width?
 var F=[
 ['age','العمر','18'],
 ['country','البلد','ليبيا'],
@@ -132,7 +120,7 @@ var F=[
 ];
 var gender='boy';
 var GN={boy:'ذكر',girl:'أنثى'};
-// build form + card cells
+
 (function(){
   var f='<label>الاسم</label><input id="f_name" maxlength="24">';
   var g='<div class="cell"><small>الجنس</small><span id="o_gender">ذكر</span></div>';
@@ -140,17 +128,19 @@ var GN={boy:'ذكر',girl:'أنثى'};
     f+='<label>'+x[1]+'</label><input id="f_'+x[0]+'" maxlength="'+(x[3]?60:28)+'">';
   });
   $('form').innerHTML=f;
-  // order on card: age, gender, then the rest
   F.forEach(function(x,i){
     g+='<div class="cell'+(x[3]?' full':'')+'"><small>'+x[1]+'</small><span id="o_'+x[0]+'">—</span></div>';
     if(i===0)g+='<div class="cell"><small>الجنس</small><span id="o_gender2"></span></div>';
   });
-  // remove the first placeholder gender cell; keep the one after age
   g=g.replace('<div class="cell"><small>الجنس</small><span id="o_gender">ذكر</span></div>','').replace('o_gender2','o_gender');
   $('grid').innerHTML=g;
   $('f_name').addEventListener('input',render);
   F.forEach(function(x){$('f_'+x[0]).addEventListener('input',render)});
+  
+  // استدعاء الرندرة تلقائياً هنا فور التحميل لتعمل الألوان الداكنة فوراً
+  render(); 
 })();
+
 function render(){
   $('card').className=gender==='girl'?'girl':'';
   $('d1').textContent=gender==='girl'?'🌸':'⚽';
@@ -159,14 +149,17 @@ function render(){
   $('o_name').textContent=$('f_name').value.trim()||'اسمك هنا';
   F.forEach(function(x){$('o_'+x[0]).textContent=$('f_'+x[0]).value.trim()||'—'});
 }
+
 function setG(g){
   gender=g;
   $('bBoy').className=g==='boy'?'on':'';$('bGirl').className=g==='girl'?'on':'';
-  document.documentElement.style.setProperty('--accent',g==='boy'?'#3b9be8':'#ec5fa0');
+  document.documentElement.style.setProperty('--accent',g==='boy'?'#38bdf8':'#f43f5e');
   render();
 }
+
 $('bBoy').onclick=function(){setG('boy')};
 $('bGirl').onclick=function(){setG('girl')};
+
 $('photo').onchange=function(e){
   var file=e.target.files&&e.target.files[0];
   if(!file)return;
@@ -174,6 +167,7 @@ $('photo').onchange=function(e){
   r.onload=function(){$('ava').innerHTML='<img alt="" src="'+r.result+'">'};
   r.readAsDataURL(file);
 };
+
 $('save').onclick=async function(){
   var btn=$('save'),msg=$('msg');
   btn.disabled=true;msg.textContent='جارٍ تجهيز الصورة…';
@@ -181,24 +175,17 @@ $('save').onclick=async function(){
     if(document.fonts&&document.fonts.ready)await document.fonts.ready;
     var canvas=await html2canvas($('card'),{scale:2,backgroundColor:null,useCORS:true});
     var blob=await new Promise(function(r){canvas.toBlob(r,'image/png')});
-    $('outImg').src=canvas.toDataURL('image/png');
-    var dl=null;
-    try{dl=await claude.use('downloads')}catch(e){}
-    if(dl){
-      try{await dl.save({filename:'بطاقتي.png',data:blob});msg.textContent='تم الحفظ ✅ الآن انشرها في القروب';}
-      catch(e){
-        if(e&&e.code==='declined'){msg.textContent='تم الإلغاء.';}
-        else{$('out').style.display='block';msg.textContent='';}
-      }
-    }else{
-      var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='بطاقتي.png';
-      document.body.appendChild(a);a.click();a.remove();
-      $('out').style.display='block';msg.textContent='تم التنزيل ✅ إن لم يبدأ، اضغط مطولاً على الصورة أدناه.';
-    }
-  }catch(e){msg.textContent='تعذّر إنشاء الصورة، حاول مرة أخرى.';}
-  btn.disabled=false;
+    var url=URL.createObjectURL(blob);
+    $('outImg').src=url;
+    $('out').style.display='block';
+    msg.textContent='تم إنشاء الصورة بنجاح!';
+  }catch(err){
+    console.error(err);
+    msg.textContent='حدث خطأ أثناء حفظ الصورة.';
+  }finally{
+    btn.disabled=false;
+  }
 };
-setG('boy');
 </script>
 </body>
 </html>
