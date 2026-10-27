@@ -25,29 +25,36 @@ input,textarea{width:100%;font:inherit;padding:9px 12px;border-radius:10px;borde
 .stick{position:sticky;top:env(safe-area-inset-top,0px)}
 @media(max-width:799px){.stick{position:static}}
 .cardbox{display:flex;justify-content:center}
-.btn{width:100%;margin-top:14px;font:inherit;font-weight:800;font-size:16px;padding:13px;border:0;border-radius:14px;background:var(--accent);color:#fff;cursor:pointer}
+.btn{display:block;width:100%;margin-top:12px;font:inherit;font-weight:800;font-size:16px;padding:13px;border:0;border-radius:14px;background:var(--accent);color:#fff;cursor:pointer;text-align:center;text-decoration:none}
+.btn.alt{background:transparent;border:2px solid var(--line);color:var(--text)}
 .btn:disabled{opacity:.6}
 .msg{min-height:22px;text-align:center;font-size:13px;color:var(--muted);margin-top:6px}
-#out{display:none;margin-top:10px;text-align:center}
-#out img{max-width:100%;border-radius:12px}
 
-/* ألوان بطاقة الذكور: داكنة شبابية وفخمة */
+/* نافذة المعاينة */
+#ov{display:none;position:fixed;inset:0;z-index:999;background:rgba(10,8,16,.96);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+#ov.show{display:block}
+.ovin{max-width:420px;margin:0 auto;text-align:center}
+.tip{background:var(--panel);border:1px solid var(--accent);border-radius:14px;padding:10px 12px;font-size:14px;font-weight:600;margin-bottom:12px}
+.warn{display:none;background:#7c2d12;border-radius:14px;padding:10px 12px;font-size:13px;font-weight:600;margin-bottom:12px}
+#outImg{display:block;width:100%;max-width:100%;height:auto;border-radius:14px;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto}
+
+/* ألوان بطاقة الذكور */
 #card {
-  --c1: #0F172A;     
-  --c2: #1E293B;     
-  --ink: #F8FAFC;    
-  --pop: #38BDF8;    
-  --soft: #33415580; 
+  --c1: #0F172A;
+  --c2: #1E293B;
+  --ink: #F8FAFC;
+  --pop: #38BDF8;
+  --soft: #33415580;
   width:340px;padding:12px;border-radius:26px;background:linear-gradient(160deg,var(--c1),var(--c2));color:var(--ink);position:relative;overflow:hidden;font-family:'Cairo',Tahoma,Arial,sans-serif;direction:rtl
 }
 
-/* ألوان بطاقة البنات: داكنة وغامضة عصرية */
+/* ألوان بطاقة البنات */
 #card.girl {
-  --c1: #1E112A;     
-  --c2: #2D122D;     
-  --ink: #FDF4FF;    
-  --pop: #F43F5E;    
-  --soft: #4C1D9560; 
+  --c1: #1E112A;
+  --c2: #2D122D;
+  --ink: #FDF4FF;
+  --pop: #F43F5E;
+  --soft: #4C1D9560;
 }
 
 #card .in {
@@ -55,7 +62,7 @@ input,textarea{width:100%;font:inherit;padding:9px 12px;border-radius:10px;borde
   border-radius: 20px;
   padding: 12px;
   position: relative;
-  background: #000000c0; /* تم التعديل إلى الأسود الداكن الشفاف لراحة العين وبروز النصوص */
+  background: #000000c0;
 }
 
 .dec{position:absolute;font-size:20px;opacity:.85;top:6px}
@@ -102,9 +109,25 @@ input,textarea{width:100%;font:inherit;padding:9px 12px;border-radius:10px;borde
     </div>
     <button class="btn" id="save">⬇️ احفظ البطاقة كصورة</button>
     <div class="msg" id="msg"></div>
-    <div id="out"><p class="sub">اضغط مطولاً على الصورة لحفظها:</p><img id="outImg" alt="بطاقتك"></div>
   </div>
 </div>
+
+<!-- نافذة النتيجة -->
+<div id="ov">
+  <div class="ovin">
+    <div class="warn" id="warn">
+      ⚠️ أنت تفتح الصفحة داخل متصفح تطبيق (واتساب/تيليغرام/إنستغرام...) وقد يمنع التنزيل.
+      الأفضل فتح الرابط في كروم أو سفاري.
+      <button class="btn alt" id="cp" style="margin-top:8px;padding:9px">📋 نسخ رابط الصفحة</button>
+    </div>
+    <div class="tip">📱 اضغط مطولاً على الصورة ثم اختر «حفظ في الصور» أو «تنزيل الصورة»</div>
+    <img id="outImg" alt="بطاقتك">
+    <button class="btn" id="sh" style="display:none">📤 مشاركة / حفظ في الصور</button>
+    <a class="btn alt" id="dl">⬇️ تنزيل الصورة</a>
+    <button class="btn alt" id="cl">✖ إغلاق</button>
+  </div>
+</div>
+
 <script>
 var $=function(id){return document.getElementById(id)};
 var F=[
@@ -143,9 +166,7 @@ var GN={boy:'ذكر',girl:'أنثى'};
   $('grid').innerHTML=g;
   $('f_name').addEventListener('input',render);
   F.forEach(function(x){$('f_'+x[0]).addEventListener('input',render)});
-  
-  // استدعاء الرندرة تلقائياً هنا فور التحميل لتعمل الألوان الداكنة فوراً
-  render(); 
+  render();
 })();
 
 function render(){
@@ -175,46 +196,95 @@ $('photo').onchange=function(e){
   r.readAsDataURL(file);
 };
 
+/* ===== الحفظ ===== */
+var lastFile=null;
+var inApp=/FBAN|FBAV|Instagram|WhatsApp|Telegram|Snapchat|TikTok|Line\/|MicroMessenger|; wv\)/i.test(navigator.userAgent);
+
+function openOv(){
+  $('warn').style.display=inApp?'block':'none';
+  $('ov').className='show';
+  document.body.style.overflow='hidden';
+}
+function closeOv(){
+  $('ov').className='';
+  document.body.style.overflow='';
+}
+$('cl').onclick=closeOv;
+
+$('cp').onclick=function(){
+  var u=location.href;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(u).then(function(){$('cp').textContent='✅ تم النسخ، الصقه في كروم أو سفاري'});
+  }else{
+    prompt('انسخ الرابط:',u);
+  }
+};
+
+function loadScript(src){
+  return new Promise(function(res,rej){
+    var s=document.createElement('script');
+    s.src=src;s.onload=res;s.onerror=rej;
+    document.head.appendChild(s);
+  });
+}
+
 $('save').onclick=async function(){
   var btn=$('save'),msg=$('msg');
   btn.disabled=true;msg.textContent='جارٍ تجهيز الصورة…';
   try{
-    if(document.fonts&&document.fonts.ready)await document.fonts.ready;
-    var canvas=await html2canvas($('card'),{scale:2,backgroundColor:null,useCORS:true});
-    var blob=await new Promise(function(r){canvas.toBlob(r,'image/png')});
-    if(!blob)throw new Error('فشل إنشاء الصورة');
-
-    var name='بطاقة-'+($('f_name').value.trim()||'عني')+'.png';
-    var url=URL.createObjectURL(blob);
-
-    // نعرض المعاينة دائماً كخيار احتياطي (ضغط مطوّل للحفظ)
-    $('outImg').src=url;
-    $('out').style.display='block';
-
-    // 1) على الجوال: نافذة المشاركة (تتيح "حفظ في الصور")
-    var file=new File([blob],name,{type:'image/png'});
-    if(navigator.canShare&&navigator.canShare({files:[file]})){
-      try{
-        await navigator.share({files:[file],title:'بطاقتي'});
-        msg.textContent='تم! ✅';
-        return;
-      }catch(e){
-        if(e.name==='AbortError'){msg.textContent='تم الإلغاء.';return;}
-        // أي خطأ آخر: ننتقل للتنزيل المباشر
-      }
+    // احتياط: إذا لم تُحمَّل المكتبة، جرّب مصدراً آخر
+    if(typeof html2canvas==='undefined'){
+      await loadScript('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js');
     }
+    if(document.fonts&&document.fonts.ready)await document.fonts.ready;
 
-    // 2) تنزيل مباشر (الكمبيوتر وأغلب المتصفحات)
-    var a=document.createElement('a');
-    a.href=url;a.download=name;
-    document.body.appendChild(a);a.click();a.remove();
-    setTimeout(function(){URL.revokeObjectURL(url)},60000);
-    msg.textContent='تم التنزيل ✅ وإن لم يظهر، اضغط مطولاً على الصورة أدناه.';
+    // مهم للجوال: إعادة الصفحة للأعلى وإلا تخرج الصورة فارغة أو مزاحة
+    var oy=window.scrollY||0;
+    window.scrollTo(0,0);
+    await new Promise(function(r){requestAnimationFrame(function(){setTimeout(r,80)})});
+
+    var canvas=await html2canvas($('card'),{
+      scale:2,
+      backgroundColor:null,
+      useCORS:true,
+      logging:false,
+      scrollX:0,
+      scrollY:0,
+      windowWidth:document.documentElement.clientWidth
+    });
+    window.scrollTo(0,oy);
+
+    var dataUrl=canvas.toDataURL('image/png');
+    var name='card-'+Date.now()+'.png';
+
+    $('outImg').src=dataUrl;
+    $('dl').href=dataUrl;
+    $('dl').setAttribute('download',name);
+
+    // تجهيز ملف المشاركة
+    lastFile=null;
+    try{
+      var blob=await new Promise(function(r){canvas.toBlob(r,'image/png')});
+      if(blob)lastFile=new File([blob],name,{type:'image/png'});
+    }catch(e){}
+    var canShare=!!(lastFile&&navigator.canShare&&navigator.canShare({files:[lastFile]}));
+    $('sh').style.display=canShare?'block':'none';
+
+    openOv();
+    msg.textContent='';
   }catch(err){
     console.error(err);
-    msg.textContent='حدث خطأ أثناء حفظ الصورة.';
+    msg.textContent='حدث خطأ: '+(err&&err.message?err.message:err);
   }finally{
     btn.disabled=false;
+  }
+};
+
+$('sh').onclick=async function(){
+  try{
+    await navigator.share({files:[lastFile],title:'بطاقتي'});
+  }catch(e){
+    if(e.name!=='AbortError')alert('تعذّرت المشاركة، اضغط مطولاً على الصورة لحفظها.');
   }
 };
 </script>
