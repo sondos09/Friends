@@ -33,9 +33,34 @@ input,textarea{width:100%;font:inherit;padding:9px 12px;border-radius:10px;borde
 #out{display:none;margin-top:10px;text-align:center}
 #out img{max-width:100%;border-radius:12px}
 
-#card{--c1:#dff3ff;--c2:#b9e0ff;--ink:#17405f;--pop:#3b9be8;--soft:#ffffffb8;
-width:340px;padding:12px;border-radius:26px;background:linear-gradient(160deg,var(--c1),var(--c2));color:var(--ink);position:relative;overflow:hidden;font-family:'Cairo',Tahoma,Arial,sans-serif;direction:rtl}
-#card.girl{--c1:#ffe8f3;--c2:#ffc7e0;--ink:#5c1f45;--pop:#ec5fa0}
+/* 1. ألوان بطاقة الذكور: داكنة شبابية وفخمة (Dark Slate Blue) */
+#card {
+  --c1: #0F172A;     /* اللون الداكن الأساسي اللي طلبته */
+  --c2: #1E293B;     /* التدرج الداكن المكمل */
+  --ink: #F8FAFC;    /* لون النصوص الأساسية (أبيض ثلجي ناصع للوضوح) */
+  --pop: #38BDF8;    /* لون الشريط والحدود (أزرق سماوي مضيء نيون) */
+  --soft: #33415580; /* خلفية مربعات البيانات (رمادي داكن شبه شفاف) */
+  
+  width: 340px;
+  padding: 12px;
+  border-radius: 26px;
+  background: linear-gradient(160deg, var(--c1), var(--c2));
+  color: var(--ink);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Cairo', Tahoma, Arial, sans-serif;
+  direction: rtl;
+}
+
+/* 2. ألوان بطاقة البنات: داكنة غامضة وبناتية في نفس الوقت (Dark Cyber Pink) */
+#card.girl {
+  --c1: #1E112A;     /* خلفية بنفسجية ليلية داكنة جداً */
+  --c2: #2D122D;     /* تدرج وردي مخملي غامق */
+  --ink: #FDF4FF;    /* لون النصوص (أبيض وردي ناعم وواضح) */
+  --pop: #F43F5E;    /* لون الشريط والحدود (وردي نيون مضيء وجذاب) */
+  --soft: #4C1D9560; /* خلفية المربعات (بنفسجي داكن شبه شفاف) */
+}
+
 #card .in{border:3px dashed var(--pop);border-radius:20px;padding:12px;position:relative;background:#ffffff40}
 .dec{position:absolute;font-size:20px;opacity:.85;top:6px}
 .ribbon{display:block;width:max-content;margin:0 auto 8px;background:var(--pop);color:#fff;font-weight:800;font-size:15px;padding:2px 18px;border-radius:999px}
